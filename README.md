@@ -9,9 +9,9 @@ Upon registering on our platform, users can enroll in their preferred courses an
 ## Key Features
 
 ### Lectures
-Description: Discover our range of lectures tailored to your interests. Register with us to kickstart your tech career.
-<br />
-How to Access: Simply navigate to the "Lectures" section on our website.
+Description: Explore our diverse range of lectures customized to your interests. Register with us to kickstart your tech career, where you can filter lectures by course and search by topic name.
+
+How to Access: Access the "Lectures" section on our website for seamless navigation.
 
 
 ### Login and Authentication

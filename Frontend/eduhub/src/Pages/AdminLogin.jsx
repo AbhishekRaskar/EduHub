@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
   FormControl,
   FormLabel,
   Input,
+  Checkbox,
   Stack,
   Button,
   Heading,
@@ -18,65 +19,62 @@ import {
   ModalFooter,
   useToast,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import axios from "axios";
 
-const Login = () => {
+const AdminLogin = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   const toast = useToast();
 
-  const onClose = () => {
-    setIsOpen(false);
-  };
-
-  const handleLogin = async () => {
-    const userData = {
+  const handleAdminLogin = async () => {
+    const adminData = {
       email,
       password,
     };
 
     try {
-      const response = await axios.post(
-        "https://eduhub-d5dn.onrender.com/students/login",
-        userData
+      const adminLoginResponse = await axios.post(
+        "https://eduhub-d5dn.onrender.com/admin/admin-login",
+        adminData
       );
-      console.log("Login Response:", response.data);
-      localStorage.setItem("student", JSON.stringify(response.data.student));
-
-      // Assuming response.data.success indicates successful login
-      if (response.status === 200) {
-        // Perform actions on successful login
+      console.log(adminLoginResponse, "adminLoginResponse");
+      if (adminLoginResponse.status === 200) {
+        localStorage.setItem("adminToken", adminLoginResponse.data.token);
+        
         toast({
           position: "top",
-          title: "Login successful",
+          title: "Admin Login successful",
           status: "success",
           duration: 3000,
           isClosable: true,
         });
         onClose();
-        window.location.href = "/lectures";
+        window.location.href = "/admin-list";
       } else {
-        // Handle login failure
         toast({
           position: "top",
-          title: "Login failed",
+          title: "Admin Login failed",
           status: "error",
           duration: 3000,
           isClosable: true,
         });
       }
     } catch (error) {
-      console.error("Login error:", error);
-      // Handle error from API
+      console.error("Error during admin login:", error);
       toast({
         position: "top",
-        title: "Login failed",
+        title: "Admin Login failed",
         status: "error",
         duration: 3000,
         isClosable: true,
       });
     }
+  };
+
+  const onClose = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -85,7 +83,7 @@ const Login = () => {
       <ModalContent>
         <ModalHeader>
           <Heading fontSize={"4xl"} color={"#DC143C"}>
-            Login
+            Admin Login
           </Heading>
         </ModalHeader>
         <ModalCloseButton />
@@ -111,6 +109,22 @@ const Login = () => {
                 />
               </FormControl>
               <Stack spacing={10}>
+                <Stack
+                  direction={{ base: "column", sm: "row" }}
+                  align={"start"}
+                  justify={"space-between"}
+                >
+                  <Checkbox color={"black"}>Remember me</Checkbox>
+                  <Link
+                    style={{
+                      textDecoration: "none",
+                      textDecorationColor: "#DC143C",
+                      color: "#DC143C",
+                    }}
+                  >
+                    Forgot password?
+                  </Link>
+                </Stack>
                 <Button
                   size={"lg"}
                   bg={"#DC143C"}
@@ -118,7 +132,7 @@ const Login = () => {
                   _hover={{
                     bg: "#DC143C",
                   }}
-                  onClick={handleLogin}
+                  onClick={handleAdminLogin}
                 >
                   Sign in
                 </Button>
@@ -128,21 +142,6 @@ const Login = () => {
             <Text align={"center"} color={"black"}>
               New here? Join us!
               <Link
-                to="/signup"
-                style={{
-                  textDecoration: "underline",
-                  textDecorationColor: "#DC143C",
-                  color: "#DC143C",
-                }}
-              >
-                <br />
-                SignUp
-              </Link>
-            </Text>
-            <br />
-            <Text align={"center"} color={"black"}>
-              For Admins Only
-              <Link
                 to="/admin-signup"
                 style={{
                   textDecoration: "underline",
@@ -151,17 +150,15 @@ const Login = () => {
                 }}
               >
                 <br />
-                Admin
+                Admin SignUp
               </Link>
             </Text>
           </Box>
         </ModalBody>
-        <ModalFooter>
-          {/* You can add additional footer content here */}
-        </ModalFooter>
+        <ModalFooter>{/* Add additional footer content here */}</ModalFooter>
       </ModalContent>
     </Modal>
   );
 };
 
-export default Login;
+export default AdminLogin;

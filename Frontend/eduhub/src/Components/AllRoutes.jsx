@@ -7,6 +7,10 @@ import Practice from "../Pages/Practice";
 import HomePage from "../Pages/HomePage";
 import Login from "../Pages/Login";
 import Signup from "../Pages/Signup";
+import Profile from "../Pages/Profile";
+import AdminLogin from "../Pages/AdminLogin";
+import AdminSignup from "../Pages/AdminSignup";
+import AdminList from "../Pages/AdminList";
 
 const AllRoutes = () => {
   return (
@@ -19,6 +23,10 @@ const AllRoutes = () => {
         <Route path="/practice" element={<Practice />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin-signup" element={<AdminSignup />} />
+        <Route path="/admin-list" element={<AdminList />} />
       </Routes>
     </div>
   );

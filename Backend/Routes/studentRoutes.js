@@ -29,15 +29,18 @@ studentRouter.post("/login", async (req, res) => {
     const { email, password } = req.body;
     try {
         const student = await studentModel.findOne({ email });
+        console.log("Student Data:", student);
         if (student) {
             bcrypt.compare(password, student.password, (err, result) => {
                 if (result) {
                     res.status(200).json({
                         msg: "Login successful.",
                         student: {
-                            studentName: student.name,
-                            studentEmail: student.email,
-                            studentCourse: student.course
+                            name: student.name,
+                            email: student.email,
+                            course: student.course,
+                            contact: student.contact,
+                            password: student.password
                         }
                     });
                 } else {
@@ -53,17 +56,16 @@ studentRouter.post("/login", async (req, res) => {
 });
 
 // Update Profile
-studentRouter.put("/profile", async (req, res) => {
-    const { email } = req.body;
+studentRouter.patch("/profile", async (req, res) => {
+    const { email, name, contact, course } = req.body;
     try {
-        const student = await studentModel.findOne({ email });
+        const student = await studentModel.findOneAndUpdate(
+            { email: email },
+            { name: name, contact: contact, course: course },
+            { new: true }
+        );
         if (student) {
-            // Update profile fields here
-            // For example, update name and contact
-            student.name = req.body.name;
-            student.contact = req.body.contact;
-            await student.save();
-            res.status(200).json({ msg: "Profile updated successfully." });
+            res.status(200).json({ msg: "Profile updated successfully.", student });
         } else {
             res.status(400).json({ msg: "Student not found." });
         }
@@ -71,6 +73,7 @@ studentRouter.put("/profile", async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
+
 
 module.exports = {
     studentRouter
